@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">App Commons</string>
+    <string name="label_dismiss">Dismiss</string>
+    <string name="label_connect_to_the_internet">Please connect to the internet</string>
+    <string name="label_required">Required</string>
+    <string name="label_invalid_email">Invalid email</string>
+    <string name="label_invalid_username">Invalid Username</string>
+    <string name="label_invalid_number_range">Invalid number range</string>
+    <string name="label_invalid_text_length">Invalid length</string>
+    <string name="label_invalid_positive_number">Numbers must not be negative</string>
+</resources>
