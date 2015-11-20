@@ -15,16 +15,16 @@ public class DateUtils {
 
     @SuppressLint("SimpleDateFormat")
     public static String formatToSmartDateTime(String date) {
-        if (isThisDateToday(date)) {
+        if (isToday(date)) {
             return formatToTime(date);
-        } else if (isThisDateTheCurrentYear(date)) {
+        } else if (isThisYear(date)) {
             return new SimpleDateFormat("MMM d").format(new Date(Long.parseLong(date)));
         }
 
         return formatToDate(date);
     }
 
-    private static boolean isThisDateTheCurrentYear(String date) {
+    private static boolean isThisYear(String date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(Long.parseLong(date));
 
@@ -33,7 +33,7 @@ public class DateUtils {
         return calendar.get(Calendar.YEAR) == nowCalendar.get(Calendar.YEAR);
     }
 
-    private static boolean isThisDateToday(String dateMilliseconds) {
+    private static boolean isToday(String dateMilliseconds) {
         return android.text.format.DateUtils.isToday(Long.parseLong(dateMilliseconds));
     }
 
@@ -49,17 +49,36 @@ public class DateUtils {
         return DateFormat.getTimeInstance().format(new Date(Long.valueOf(dateMilliseconds)));
     }
 
+    @SuppressLint("SimpleDateFormat")
     public static DateFormat newXMLGregorianCalendaDateFormat() {
-        return new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        return new SimpleDateFormat("yyyy-MM-dd");
     }
 
+    @SuppressLint("SimpleDateFormat")
     public static String getMonthString(String date) {
-        return new SimpleDateFormat("MMM", Locale.getDefault()).format(new Date(Long.parseLong(date)));
+        return new SimpleDateFormat("MMM").format(new Date(Long.parseLong(date)));
     }
 
-    public static String getLastXMonths(int offset) {
+    public static String getMonthYearString(String date) {
+        return new SimpleDateFormat("MMM yyyy", Locale.getDefault()).format(new Date(Long.parseLong(date)));
+    }
+
+    public static String getLastNMonths(int monthSeed) {
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.MONTH, offset * -1);
+        calendar.add(Calendar.MONTH, monthSeed * -1);
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+
+        return String.valueOf(calendar.getTime().getTime());
+    }
+
+    public static String getLastNMonths(int monthSeed, long startDate) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(startDate);
+        calendar.add(Calendar.MONTH, monthSeed * -1);
         calendar.set(Calendar.DAY_OF_MONTH, 1);
         calendar.set(Calendar.HOUR_OF_DAY, 0);
         calendar.set(Calendar.MINUTE, 0);

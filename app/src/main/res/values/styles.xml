@@ -7,5 +7,24 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+    <style name="ListItemPrimaryText" parent="android:Widget.TextView">
+        <item name="android:maxLines">1</item>
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">@dimen/list_item_primary_text</item>
+    </style>
+
+    <style name="ListDivider">
+        <item name="android:background">@color/list_divider</item>
+        <item name="android:paddingTop">@dimen/list_item_padding</item>
+        <item name="android:paddingBottom">0dp</item>
+    </style>
+
+    <style name="ListItemSecondaryText" parent="android:Widget.TextView">
+        <item name="android:maxLines">1</item>
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:textColor">@color/list_item_secondary</item>
+        <item name="android:textSize">@dimen/list_item_secondary_text</item>
+    </style>
 
 </resources>

@@ -4,11 +4,14 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
@@ -21,6 +24,7 @@ import com.bentech.android.appcommons.activity.operations.ActivityOperations;
 import com.bentech.android.appcommons.activity.operations.FeedbackOperations;
 import com.bentech.android.appcommons.activity.operations.FragmentOperations;
 import com.bentech.android.appcommons.config.AppCommonsConfiguration;
+import com.bentech.android.appcommons.constants.alert.AlertLevel;
 
 /**
  * Created by Daniel on 07/11/2015.
@@ -28,6 +32,15 @@ import com.bentech.android.appcommons.config.AppCommonsConfiguration;
 public class AppCommonsActivity extends AppCompatActivity implements ActivityOperations, FragmentOperations, FeedbackOperations {
     private final AppCommonsConfiguration appCommonsConfiguration;
     private AppCommonsContext appCommonsContext;
+    private String TAG = AppCommonsActivity.class.getSimpleName();
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if(savedInstanceState != null) {
+            setAppCommonsContext((AppCommonsContext) savedInstanceState.getSerializable(AppCommonsContext.class.getSimpleName()));
+        }
+    }
 
     public AppCommonsActivity() {
         appCommonsConfiguration = AppCommons.getAppCommonsConfiguration();
@@ -43,13 +56,13 @@ public class AppCommonsActivity extends AppCompatActivity implements ActivityOpe
     }
 
     @Override
-    public void startActivity(Intent intent) {
-        super.startActivity(intent);
+    public void setAppCommonsContext(AppCommonsContext appCommonsContext) {
+        this.appCommonsContext = appCommonsContext;
     }
 
     @Override
-    public void setAppCommonsContext(AppCommonsContext appCommonsContext) {
-        this.appCommonsContext = appCommonsContext;
+    public void startActivity(Intent intent) {
+        super.startActivity(intent);
     }
 
     @Override
@@ -64,6 +77,24 @@ public class AppCommonsActivity extends AppCompatActivity implements ActivityOpe
 
     @Override
     public void clearBackStack() {
+
+        // if there is a fragment and the back stack of this fragment is not empty,
+        // then emulate 'onBackPressed' behaviour, because in default, it is not working
+        FragmentManager fm = getSupportFragmentManager();
+        if (fm.getFragments() == null) {
+            Log.d(TAG, "No fragments to clear from back stack");
+            return;
+        }
+        for (Fragment frag : fm.getFragments()) {
+            if (frag != null) {
+                FragmentManager childFm = frag.getChildFragmentManager();
+                if (childFm.getBackStackEntryCount() > 0) {
+                    Log.d(TAG, "Popping child fragment");
+                    childFm.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                }
+            }
+        }
+
         getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
 
@@ -138,13 +169,10 @@ public class AppCommonsActivity extends AppCompatActivity implements ActivityOpe
     }
 
     @Override
-    public Snackbar showShortSnackBar(View view, int messageId, int actionLabel, final View.OnClickListener onClickListener) {
+    public Snackbar showShortSnackBar(View view, int messageId, int actionLabel, final View.OnClickListener onClickListener, AlertLevel alertLevel) {
         final Snackbar snackBar = Snackbar.make(view, getString(messageId), Snackbar.LENGTH_SHORT);
         View snackView = snackBar.getView();
-        TextView tv = (TextView)
-                snackView.findViewById(R.id.snackbar_text);
-        tv.setTextColor(appCommonsConfiguration.getSnackbarTextColor());
-        tv.setTextSize(appCommonsConfiguration.getSnackbarTextSize());
+        buildSnackbar(snackView, alertLevel);
         snackBar.setActionTextColor(appCommonsConfiguration.getSnackbarActionTextColor());
         snackBar.setAction(actionLabel, new View.OnClickListener() {
             @Override
@@ -158,25 +186,19 @@ public class AppCommonsActivity extends AppCompatActivity implements ActivityOpe
     }
 
     @Override
-    public Snackbar showShortSnackBar(View view, int messageId) {
+    public Snackbar showShortSnackBar(View view, int messageId, AlertLevel alertLevel) {
         Snackbar snackbar = Snackbar.make(view, getString(messageId), Snackbar.LENGTH_SHORT);
         View snackView = snackbar.getView();
-        TextView tv = (TextView)
-                snackView.findViewById(R.id.snackbar_text);
-        tv.setTextColor(appCommonsConfiguration.getSnackbarTextColor());
-        tv.setTextSize(appCommonsConfiguration.getSnackbarTextSize());
+        buildSnackbar(snackView, alertLevel);
         snackbar.show();
         return snackbar;
     }
 
     @Override
-    public Snackbar showIndefiniteSnackBar(View view, int messageId, int actionLabel) {
+    public Snackbar showIndefiniteSnackBar(View view, int messageId, int actionLabel, AlertLevel alertLevel) {
         final Snackbar snackBar = Snackbar.make(view, getString(messageId), Snackbar.LENGTH_INDEFINITE);
         View snackView = snackBar.getView();
-        TextView tv = (TextView)
-                snackView.findViewById(R.id.snackbar_text);
-        tv.setTextColor(appCommonsConfiguration.getSnackbarTextColor());
-        tv.setTextSize(appCommonsConfiguration.getSnackbarTextSize());
+        buildSnackbar(snackView, alertLevel);
         snackBar.setActionTextColor(appCommonsConfiguration.getSnackbarActionTextColor());
         snackBar.setAction(actionLabel, new View.OnClickListener() {
             @Override
@@ -189,13 +211,10 @@ public class AppCommonsActivity extends AppCompatActivity implements ActivityOpe
     }
 
     @Override
-    public Snackbar showIndefiniteSnackBar(View view, int messageId) {
+    public Snackbar showIndefiniteSnackBar(View view, int messageId, AlertLevel alertLevel) {
         final Snackbar snackBar = Snackbar.make(view, getString(messageId), Snackbar.LENGTH_INDEFINITE);
         View snackView = snackBar.getView();
-        TextView tv = (TextView)
-                snackView.findViewById(R.id.snackbar_text);
-        tv.setTextColor(appCommonsConfiguration.getSnackbarTextColor());
-        tv.setTextSize(appCommonsConfiguration.getSnackbarTextSize());
+        buildSnackbar(snackView, alertLevel);
         snackBar.setActionTextColor(appCommonsConfiguration.getSnackbarActionTextColor());
         snackBar.setAction(R.string.label_dismiss, new View.OnClickListener() {
             @Override
@@ -208,13 +227,10 @@ public class AppCommonsActivity extends AppCompatActivity implements ActivityOpe
     }
 
     @Override
-    public Snackbar showIndefiniteSnackBar(View view, int messageId, final View.OnClickListener onClickListener) {
+    public Snackbar showIndefiniteSnackBar(View view, int messageId, final View.OnClickListener onClickListener, AlertLevel alertLevel) {
         final Snackbar snackBar = Snackbar.make(view, getString(messageId), Snackbar.LENGTH_INDEFINITE);
         View snackView = snackBar.getView();
-        TextView tv = (TextView)
-                snackView.findViewById(R.id.snackbar_text);
-        tv.setTextColor(appCommonsConfiguration.getSnackbarTextColor());
-        tv.setTextSize(appCommonsConfiguration.getSnackbarTextSize());
+        buildSnackbar(snackView, alertLevel);
         snackBar.setActionTextColor(appCommonsConfiguration.getSnackbarActionTextColor());
         snackBar.setAction(R.string.label_dismiss, new View.OnClickListener() {
             @Override
@@ -230,13 +246,10 @@ public class AppCommonsActivity extends AppCompatActivity implements ActivityOpe
 
 
     @Override
-    public Snackbar showIndefiniteSnackBar(View view, int messageId, int actionLabel, final View.OnClickListener onClickListener) {
+    public Snackbar showIndefiniteSnackBar(View view, int messageId, int actionLabel, final View.OnClickListener onClickListener, AlertLevel alertLevel) {
         final Snackbar snackBar = Snackbar.make(view, getString(messageId), Snackbar.LENGTH_INDEFINITE);
         View snackView = snackBar.getView();
-        TextView tv = (TextView)
-                snackView.findViewById(R.id.snackbar_text);
-        tv.setTextColor(appCommonsConfiguration.getSnackbarTextColor());
-        tv.setTextSize(appCommonsConfiguration.getSnackbarTextSize());
+        buildSnackbar(snackView, alertLevel);
         snackBar.setActionTextColor(appCommonsConfiguration.getSnackbarActionTextColor());
         snackBar.setAction(actionLabel, new View.OnClickListener() {
             @Override
@@ -250,16 +263,22 @@ public class AppCommonsActivity extends AppCompatActivity implements ActivityOpe
     }
 
     @Override
-    public Snackbar showLongSnackBar(View view, int messageId) {
+    public Snackbar showLongSnackBar(View view, int messageId, AlertLevel alertLevel) {
         Snackbar snackbar = Snackbar.make(view, getString(messageId), Snackbar.LENGTH_LONG);
         View snackView = snackbar.getView();
-        TextView tv = (TextView)
-                snackView.findViewById(R.id.snackbar_text);
-        tv.setTextColor(appCommonsConfiguration.getSnackbarTextColor());
-        tv.setTextSize(appCommonsConfiguration.getSnackbarTextSize());
+        buildSnackbar(snackView, alertLevel);
         snackbar.show();
 
         return snackbar;
+    }
+
+
+    private void buildSnackbar(View snackView, AlertLevel alertLevel) {
+        TextView tv = (TextView)
+                snackView.findViewById(R.id.snackbar_text);
+        tv.setTextColor(ContextCompat.getColor(this, alertLevel.getFgColor()));
+        snackView.setBackgroundColor(ContextCompat.getColor(this, alertLevel.getBgColor()));
+        tv.setTextSize(appCommonsConfiguration.getSnackbarTextSize());
     }
 
     @Override
@@ -267,4 +286,14 @@ public class AppCommonsActivity extends AppCompatActivity implements ActivityOpe
         Toast.makeText(this, getString(messageId), Toast.LENGTH_LONG).show();
     }
 
+    @Override
+    public void showShortToast(int messageId) {
+        Toast.makeText(this, getString(messageId), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(AppCommonsContext.class.getSimpleName(), appCommonsContext);
+    }
 }

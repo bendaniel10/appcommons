@@ -3,4 +3,15 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="info_bg_color">#BDE5F8</color>
+    <color name="info_fg_color">#00529B</color>
+    <color name="success_fg_color">#4F8A10</color>
+    <color name="success_bg_color">#DFF2BF</color>
+    <color name="error_fg_color">#D8000C</color>
+    <color name="error_bg_color">#FFBABA</color>
+    <color name="warn_fg_color">#9F6000</color>
+    <color name="warn_bg_color">#FEEFB3</color>
+    <color name="list_divider">#CCCCCC</color>
+    <color name="list_item_secondary">#666666</color>
+    <color name="black">#000000</color>
 </resources>

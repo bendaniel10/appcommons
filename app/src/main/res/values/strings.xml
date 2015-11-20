@@ -8,4 +8,7 @@
     <string name="label_invalid_number_range">Invalid number range</string>
     <string name="label_invalid_text_length">Invalid length</string>
     <string name="label_invalid_positive_number">Numbers must not be negative</string>
+    <string name="label_not_available">Not available</string>
+    <string name="label_not_available_abbr">N / A</string>
+    <string name="invalid_date">Invalid date</string>
 </resources>
