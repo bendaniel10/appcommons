@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Daniel on 9/2/2015.
@@ -75,6 +76,19 @@ public class DateUtils {
         return String.valueOf(calendar.getTime().getTime());
     }
 
+    public static boolean isDateGreaterThanToday(long selectedDate) {
+        return TimeUnit.DAYS.convert(moveDateToBeginningOfDay(new Date(selectedDate)).getTime() - moveDateToBeginningOfDay(new Date()).getTime(), TimeUnit.MILLISECONDS) >= 1;
+    }
+    public static Date moveDateToBeginningOfDay(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+
+        return calendar.getTime();
+    }
     public static String getLastNMonths(int monthSeed, long startDate) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(startDate);

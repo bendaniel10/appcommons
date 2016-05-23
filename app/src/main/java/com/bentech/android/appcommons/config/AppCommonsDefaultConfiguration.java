@@ -3,6 +3,9 @@ package com.bentech.android.appcommons.config;
 import android.graphics.Color;
 
 import com.bentech.android.appcommons.R;
+import com.bentech.android.appcommons.permission.AndroidPermissionItem;
+
+import java.util.ArrayList;
 
 /**
  * Created by Daniel on 07/11/2015.
@@ -27,6 +30,8 @@ public class AppCommonsDefaultConfiguration extends AppCommonsConfiguration {
         setEditTextInvalidNumberRangeErrorMessage(R.string.label_invalid_number_range);
         setEditTextTextLengthErrorMessage(R.string.label_invalid_text_length);
         setEditTextInvalidPositiveNumberErrorMessage(R.string.label_invalid_positive_number);
+        setEnableRequiredPermissionsMessage(R.string.label_enable_permissions_hint);
+        setDangerousPermissions(new ArrayList<AndroidPermissionItem>());
     }
 
 }

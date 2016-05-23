@@ -1,5 +1,6 @@
 package com.bentech.android.appcommons.preference;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -33,6 +34,7 @@ public abstract class Preference implements Serializable {
         return gson.fromJson(json, this.getClass());
     }
 
+    @SuppressLint("CommitPrefEdits")
     public void savePreference() {
         SharedPreferences.Editor editor = sharedPreference.edit();
         Gson gson = new Gson();
@@ -44,7 +46,16 @@ public abstract class Preference implements Serializable {
         editor.commit();
     }
 
-    @SuppressWarnings("TryWithIdenticalCatches")
+    @SuppressLint("CommitPrefEdits")
+    public void clearPreference() {
+        SharedPreferences.Editor editor = sharedPreference.edit();
+
+        Log.d("Clearing JSON: " + getClass().getSimpleName(), "{}");
+        editor.putString(preferenceKey, "{}");
+        editor.commit();
+    }
+
+    @SuppressWarnings({"TryWithIdenticalCatches", "unchecked"})
     public static <T extends Preference> T getPreference(Class<T> preferenceClass) {
 
         Preference preference = null;

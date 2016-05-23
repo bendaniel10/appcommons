@@ -1,6 +1,9 @@
 package com.bentech.android.appcommons.config;
 
+import com.bentech.android.appcommons.permission.AndroidPermissionItem;
+
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by Daniel on 07/11/2015.
@@ -24,6 +27,8 @@ public abstract class AppCommonsConfiguration implements Serializable {
     private int editTextInvalidNumberRangeErrorMessage;
     private int editTextInvalidPositiveNumberErrorMessage;
     private int editTextTextLengthErrorMessage;
+    private int enableRequiredPermissionsMessage;
+    private List<AndroidPermissionItem> dangerousPermissions;
 
     public AppCommonsConfiguration() {
     }
@@ -165,5 +170,21 @@ public abstract class AppCommonsConfiguration implements Serializable {
 
     public void setEditTextTextLengthErrorMessage(int editTextTextLengthErrorMessage) {
         this.editTextTextLengthErrorMessage = editTextTextLengthErrorMessage;
+    }
+
+    public int getEnableRequiredPermissionsMessage() {
+        return enableRequiredPermissionsMessage;
+    }
+
+    public void setEnableRequiredPermissionsMessage(int enableRequiredPermissionsMessage) {
+        this.enableRequiredPermissionsMessage = enableRequiredPermissionsMessage;
+    }
+
+    public List<AndroidPermissionItem> getDangerousPermissions() {
+        return dangerousPermissions;
+    }
+
+    public void setDangerousPermissions(List<AndroidPermissionItem> dangerousPermissions) {
+        this.dangerousPermissions = dangerousPermissions;
     }
 }
