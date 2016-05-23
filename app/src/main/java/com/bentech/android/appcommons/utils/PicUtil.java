@@ -17,14 +17,12 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 
 import com.bentech.android.appcommons.AppCommons;
-import com.bentech.android.appcommons.config.AppCommonsConfiguration;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 
 public class PicUtil {
 
@@ -34,7 +32,7 @@ public class PicUtil {
     public static File getSavePath() {
         File path;
         if (hasSDCard()) { // SD card
-            path = new File(getSDCardPath() + "/ecobank/");
+            path = new File(String.format("%s/%s/", getSDCardPath(), AppCommons.getApplication().getApplicationInfo().labelRes));
             path.mkdir();
         } else {
             path = Environment.getDataDirectory();
