@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
@@ -48,4 +49,12 @@ public class DrawableUtils {
             return null;
         }
     }
+
+    public static Drawable tintMyDrawable(Drawable drawable, int color) {
+        drawable = DrawableCompat.wrap(drawable);
+        DrawableCompat.setTint(drawable, color);
+        DrawableCompat.setTintMode(drawable, PorterDuff.Mode.SRC_IN);
+        return drawable;
+    }
+
 }

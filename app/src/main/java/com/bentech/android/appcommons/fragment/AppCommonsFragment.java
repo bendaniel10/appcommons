@@ -1,5 +1,7 @@
 package com.bentech.android.appcommons.fragment;
 
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
 import com.bentech.android.appcommons.activity.AppCommonsActivity;
@@ -9,9 +11,12 @@ import com.bentech.android.appcommons.activity.AppCommonsActivity;
  */
 public class AppCommonsFragment extends Fragment {
 
-    private AppCommonsActivity appCommonsActivity;
+    protected AppCommonsActivity appCommonsActivity;
 
-    public AppCommonsFragment() {
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         this.appCommonsActivity = ((AppCommonsActivity) getActivity());
     }
 }

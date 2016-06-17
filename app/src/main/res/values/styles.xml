@@ -2,10 +2,6 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
     </style>
     <style name="ListItemPrimaryText" parent="android:Widget.TextView">
         <item name="android:maxLines">1</item>
@@ -26,5 +22,4 @@
         <item name="android:textColor">@color/list_item_secondary</item>
         <item name="android:textSize">@dimen/list_item_secondary_text</item>
     </style>
-
 </resources>
