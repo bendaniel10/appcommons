@@ -395,8 +395,10 @@ public class AppCommonsActivity extends AppCompatActivity implements ActivityOpe
                     childFm.popBackStackImmediate();
                     return;
                 } else {
-                    fm.popBackStackImmediate();
-                    return;
+                    if (fm.getBackStackEntryCount() > 0 ) {
+                        fm.popBackStackImmediate();
+                        return;
+                    }
                 }
             }
         }
