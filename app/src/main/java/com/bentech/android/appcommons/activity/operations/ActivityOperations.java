@@ -19,4 +19,12 @@ public interface ActivityOperations {
     void restartApp(Context context, Class starupClass);
 
     void hideKeyBoard();
+
+    void hideToolBar();
+
+    void showToolBar();
+
+    void setActionBarTitle(int messageId);
+
+    void setActionBarTitle(String message);
 }

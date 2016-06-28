@@ -13,7 +13,8 @@
     <dimen name="list_item_image_left_padding">16dp</dimen>
     <dimen name="list_item_primary_text">16sp</dimen>
     <dimen name="list_item_secondary_text">14sp</dimen>
-    <dimen name="container_padding">8dp</dimen>
+    <dimen name="container_padding">16dp</dimen>
+    <dimen name="content_spacing">8dp</dimen>
     <dimen name="list_item_image_size">48dp</dimen>
     <dimen name="nav_item_image_size">30dp</dimen>
     <dimen name="empty_list_text_size">14sp</dimen>

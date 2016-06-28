@@ -8,12 +8,15 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
+import android.support.annotation.StringRes;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -38,21 +41,23 @@ import java.util.List;
  * Created by Daniel on 07/11/2015.
  */
 public class AppCommonsActivity extends AppCompatActivity implements ActivityOperations, FragmentOperations, FeedbackOperations {
+    //PERMISSIONS
+    private static final int PERMISSION_REQUEST_CODE = 2;
     private final AppCommonsConfiguration appCommonsConfiguration;
     private AppCommonsContext appCommonsContext;
     private String TAG = AppCommonsActivity.class.getSimpleName();
     private Snackbar currentlyDisplayedSnackbar;
 
+    public AppCommonsActivity() {
+        appCommonsConfiguration = AppCommons.getAppCommonsConfiguration();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(savedInstanceState != null) {
+        if (savedInstanceState != null) {
             setAppCommonsContext((AppCommonsContext) savedInstanceState.getSerializable(AppCommonsContext.class.getSimpleName()));
         }
-    }
-
-    public AppCommonsActivity() {
-        appCommonsConfiguration = AppCommons.getAppCommonsConfiguration();
     }
 
     public AppCommonsConfiguration getAppCommonsConfiguration() {
@@ -107,7 +112,6 @@ public class AppCommonsActivity extends AppCompatActivity implements ActivityOpe
         getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
 
-
     public void hideCurrentlyDisplayedSnackbar() {
         if (currentlyDisplayedSnackbar != null && currentlyDisplayedSnackbar.isShown()) {
             currentlyDisplayedSnackbar.dismiss();
@@ -132,7 +136,6 @@ public class AppCommonsActivity extends AppCompatActivity implements ActivityOpe
                 .addToBackStack(replacingFragment.getClass().getSimpleName())
                 .commit();
     }
-
 
     @Override
     public void switchFragments(int contentFrameId, android.support.v4.app.Fragment replacingFragment) {
@@ -171,7 +174,6 @@ public class AppCommonsActivity extends AppCompatActivity implements ActivityOpe
                 .commit();
     }
 
-
     @Override
     public void hideKeyBoard() {
         View view = this.getCurrentFocus();
@@ -181,6 +183,39 @@ public class AppCommonsActivity extends AppCompatActivity implements ActivityOpe
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
 
+    }
+
+    @Override
+    public void hideToolBar() {
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.hide();
+        }
+    }
+
+    @Override
+    public void showToolBar() {
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.show();
+        }
+    }
+
+    @Override
+    public void setActionBarTitle(@StringRes int messageId) {
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle(messageId);
+        }
+    }
+
+    @Override
+    public void setActionBarTitle(String message) {
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle(message);
+        }
     }
 
     @Override
@@ -268,7 +303,6 @@ public class AppCommonsActivity extends AppCompatActivity implements ActivityOpe
         return snackBar;
     }
 
-
     @Override
     public Snackbar showIndefiniteSnackBar(View view, int messageId, int actionLabel, final View.OnClickListener onClickListener, AlertLevel alertLevel) {
         final Snackbar snackBar = Snackbar.make(view, getString(messageId), Snackbar.LENGTH_INDEFINITE);
@@ -297,7 +331,6 @@ public class AppCommonsActivity extends AppCompatActivity implements ActivityOpe
         return snackbar;
     }
 
-
     private void buildSnackbar(View snackView, AlertLevel alertLevel) {
         TextView tv = (TextView)
                 snackView.findViewById(R.id.snackbar_text);
@@ -321,9 +354,6 @@ public class AppCommonsActivity extends AppCompatActivity implements ActivityOpe
         super.onSaveInstanceState(outState);
         outState.putSerializable(AppCommonsContext.class.getSimpleName(), appCommonsContext);
     }
-
-    //PERMISSIONS
-    private static final int PERMISSION_REQUEST_CODE = 2;
 
     private void forceUserToEnableRequiredPermissions() {
         List<AndroidPermissionItem> notGrantedPermissions;
@@ -349,8 +379,32 @@ public class AppCommonsActivity extends AppCompatActivity implements ActivityOpe
         return requestedPermissions;
     }
 
+    public void navigateBack() {
+        // if there is a fragment and the back stack of this fragment is not empty,
+        // then emulate 'onBackPressed' behaviour, because in default, it is not working
+        hideCurrentlyDisplayedSnackbar();
+        FragmentManager fm = getSupportFragmentManager();
+        if (fm.getFragments() == null) {
+            super.onBackPressed();
+            return;
+        }
+        for (Fragment frag : fm.getFragments()) {
+            if (frag != null && frag.isVisible()) {
+                FragmentManager childFm = frag.getChildFragmentManager();
+                if (childFm.getBackStackEntryCount() > 0) {
+                    childFm.popBackStackImmediate();
+                    return;
+                } else {
+                    fm.popBackStackImmediate();
+                    return;
+                }
+            }
+        }
+        super.onBackPressed();
+    }
+
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == PERMISSION_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
