@@ -41,7 +41,7 @@ public final class EditTextUtils {
         if (!isValid) {
             setError(editTextValidator.getEditText(), editTextValidator.buildErrorMessage());
             errorMessage = editTextValidator.buildErrorMessage();
-            Log.d("ECOBANK", errorMessage);
+            Log.d("APPCOMMONS", errorMessage);
         } else {
             clearError(editTextValidator.getEditText());
         }
@@ -50,8 +50,8 @@ public final class EditTextUtils {
 
     public static void setError(EditText editText, String errorString) {
         if (editText.getParent() != null && editText.getParent() instanceof TextInputLayout) {
-            ((TextInputLayout) editText.getParent()).setErrorEnabled(true);
             ((TextInputLayout) editText.getParent()).setError(editText.getHint() == null ? errorString : editText.getHint());
+            ((TextInputLayout) editText.getParent()).setErrorEnabled(true);
         } else {
             editText.setError(editText.getHint() == null ? errorString : editText.getHint());
         }
@@ -65,7 +65,7 @@ public final class EditTextUtils {
 
     public static void clearError(EditText editText) {
         if (editText.getParent() != null && editText.getParent() instanceof TextInputLayout) {
-            ((TextInputLayout) editText.getParent()).setErrorEnabled(true);
+            ((TextInputLayout) editText.getParent()).setErrorEnabled(false);
             ((TextInputLayout) editText.getParent()).setError(null);
         } else {
             editText.setError(null);

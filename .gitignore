@@ -28,3 +28,4 @@ proguard/
 
 # IntelliJ files
 .idea
+app.iml
