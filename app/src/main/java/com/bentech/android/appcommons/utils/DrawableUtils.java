@@ -12,6 +12,8 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 import android.util.Base64;
 import android.view.View;
 
+import java.io.ByteArrayOutputStream;
+
 /**
  * Created by Daniel on 7/30/2015.
  */
@@ -48,6 +50,16 @@ public class DrawableUtils {
         } catch (Exception ex) {
             return null;
         }
+    }
+
+    //http://stackoverflow.com/a/9224180
+    public static String getStringfromBitmapDrawable(Bitmap bitmap) {
+
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+        byte[] byteArray = byteArrayOutputStream .toByteArray();
+
+        return Base64.encodeToString(byteArray, Base64.DEFAULT);
     }
 
     public static Drawable tintMyDrawable(Drawable drawable, int color) {

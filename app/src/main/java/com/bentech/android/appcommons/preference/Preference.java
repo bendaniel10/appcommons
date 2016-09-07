@@ -36,10 +36,10 @@ public abstract class Preference implements Serializable {
 
     @SuppressLint("CommitPrefEdits")
     public void savePreference() {
+        //http://stackoverflow.com/a/29670311 ?
         SharedPreferences.Editor editor = sharedPreference.edit();
         Gson gson = new Gson();
         String json = gson.toJson(this);
-
         Log.d("Saving JSON: " + getClass().getSimpleName(), json);
 
         editor.putString(preferenceKey, json);

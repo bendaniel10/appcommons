@@ -79,6 +79,10 @@ public class DateUtils {
     public static boolean isDateGreaterThanToday(long selectedDate) {
         return TimeUnit.DAYS.convert(moveDateToBeginningOfDay(new Date(selectedDate)).getTime() - moveDateToBeginningOfDay(new Date()).getTime(), TimeUnit.MILLISECONDS) >= 1;
     }
+
+    public static boolean isDateGreaterThanOrEqualToday(long selectedDate) {
+        return TimeUnit.DAYS.convert(moveDateToBeginningOfDay(new Date(selectedDate)).getTime() - moveDateToBeginningOfDay(new Date()).getTime(), TimeUnit.MILLISECONDS) >= 0;
+    }
     public static Date moveDateToBeginningOfDay(Date date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);

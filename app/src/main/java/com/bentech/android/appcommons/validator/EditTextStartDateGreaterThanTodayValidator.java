@@ -2,6 +2,7 @@ package com.bentech.android.appcommons.validator;
 
 import android.widget.EditText;
 
+import com.bentech.android.appcommons.AppCommons;
 import com.bentech.android.appcommons.R;
 import com.bentech.android.appcommons.utils.DateUtils;
 
@@ -13,12 +14,12 @@ public class EditTextStartDateGreaterThanTodayValidator extends EditTextValidato
     private final long startDateMilliSecs;
 
     public EditTextStartDateGreaterThanTodayValidator(EditText startDateEditText, long startDateMilliSecs) {
-        super(startDateEditText, R.string.label_start_date_greater_than_today_error);
+        super(startDateEditText, AppCommons.getAppCommonsConfiguration().getEditTextStartDateGreaterThanTodayErrorMessage());
         this.startDateMilliSecs = startDateMilliSecs;
     }
 
     @Override
     public boolean isValid() {
-        return !DateUtils.isDateGreaterThanToday(startDateMilliSecs);
+        return DateUtils.isDateGreaterThanToday(startDateMilliSecs);
     }
 }

@@ -29,6 +29,9 @@ public class AppCommonsDefaultConfiguration extends AppCommonsConfiguration {
         setEditTextInvalidUsernameErrorMessage(R.string.label_invalid_username);
         setEditTextInvalidNumberRangeErrorMessage(R.string.label_invalid_number_range);
         setEditTextTextLengthErrorMessage(R.string.label_invalid_text_length);
+        setEditTextStartDateGreaterThanTodayErrorMessage(R.string.label_start_date_greater_than_today_error);
+        setEditTextDateEarlierThanTodayErrorMessage(R.string.date_must_not_be_earlier_than_today);
+        setEditTextPhoneNumberValidatorErrorMessage(R.string.invalid_phone_number);
         setEditTextInvalidPositiveNumberErrorMessage(R.string.label_invalid_positive_number);
         setEnableRequiredPermissionsMessage(R.string.label_enable_permissions_hint);
         setDangerousPermissions(new ArrayList<AndroidPermissionItem>());

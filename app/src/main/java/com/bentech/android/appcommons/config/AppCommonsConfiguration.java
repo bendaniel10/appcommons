@@ -29,6 +29,9 @@ public abstract class AppCommonsConfiguration implements Serializable {
     private int editTextTextLengthErrorMessage;
     private int enableRequiredPermissionsMessage;
     private List<AndroidPermissionItem> dangerousPermissions;
+    private int editTextDateEarlierThanTodayErrorMessage;
+    private int editTextStartDateGreaterThanTodayErrorMessage;
+    private int editTextPhoneNumberValidatorErrorMessage;
 
     public AppCommonsConfiguration() {
     }
@@ -186,5 +189,29 @@ public abstract class AppCommonsConfiguration implements Serializable {
 
     public void setDangerousPermissions(List<AndroidPermissionItem> dangerousPermissions) {
         this.dangerousPermissions = dangerousPermissions;
+    }
+
+    public int getEditTextDateEarlierThanTodayErrorMessage() {
+        return editTextDateEarlierThanTodayErrorMessage;
+    }
+
+    public void setEditTextDateEarlierThanTodayErrorMessage(int editTextDateLaterThanErrorMessage) {
+        this.editTextDateEarlierThanTodayErrorMessage = editTextDateLaterThanErrorMessage;
+    }
+
+    public int getEditTextStartDateGreaterThanTodayErrorMessage() {
+        return editTextStartDateGreaterThanTodayErrorMessage;
+    }
+
+    public void setEditTextStartDateGreaterThanTodayErrorMessage(int editTextStartDateGreaterThanTodayErrorMessage) {
+        this.editTextStartDateGreaterThanTodayErrorMessage = editTextStartDateGreaterThanTodayErrorMessage;
+    }
+
+    public int getEditTextPhoneNumberValidatorErrorMessage() {
+        return editTextPhoneNumberValidatorErrorMessage;
+    }
+
+    public void setEditTextPhoneNumberValidatorErrorMessage(int editTextPhoneNumberValidatorErrorMessage) {
+        this.editTextPhoneNumberValidatorErrorMessage = editTextPhoneNumberValidatorErrorMessage;
     }
 }

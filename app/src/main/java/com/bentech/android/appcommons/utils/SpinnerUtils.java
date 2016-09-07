@@ -1,6 +1,5 @@
 package com.bentech.android.appcommons.utils;
 
-import android.graphics.Color;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
@@ -52,5 +51,15 @@ public final class SpinnerUtils {
         return spinner.getSelectedItem();
     }
 
+    public static void reset(Spinner spinner) {
+        if (spinner != null) {
+            spinner.setSelection(0);
+        }
+    }
 
+    public static void resetToPosition(Spinner spinner, int position) {
+        if (spinner != null) {
+            spinner.setSelection(position);
+        }
+    }
 }

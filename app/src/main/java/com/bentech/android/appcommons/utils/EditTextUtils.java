@@ -52,6 +52,10 @@ public final class EditTextUtils {
         if (editText.getParent() != null && editText.getParent() instanceof TextInputLayout) {
             ((TextInputLayout) editText.getParent()).setError(editText.getHint() == null ? errorString : editText.getHint());
             ((TextInputLayout) editText.getParent()).setErrorEnabled(true);
+        } else if (editText.getParent() != null
+                && editText.getParent().getParent() != null && editText.getParent().getParent() instanceof TextInputLayout) {
+            ((TextInputLayout) editText.getParent().getParent()).setError(editText.getHint() == null ? errorString : editText.getHint());
+            ((TextInputLayout) editText.getParent().getParent()).setErrorEnabled(true);
         } else {
             editText.setError(editText.getHint() == null ? errorString : editText.getHint());
         }
@@ -67,7 +71,11 @@ public final class EditTextUtils {
         if (editText.getParent() != null && editText.getParent() instanceof TextInputLayout) {
             ((TextInputLayout) editText.getParent()).setErrorEnabled(false);
             ((TextInputLayout) editText.getParent()).setError(null);
-        } else {
+        }else if (editText.getParent() != null
+                && editText.getParent().getParent() != null && editText.getParent().getParent() instanceof TextInputLayout) {
+            ((TextInputLayout) editText.getParent().getParent()).setErrorEnabled(false);
+            ((TextInputLayout) editText.getParent().getParent()).setError(null);
+        }  else {
             editText.setError(null);
         }
     }
@@ -98,6 +106,20 @@ public final class EditTextUtils {
             return "";
         } else {
             return editText.getText().toString().trim();
+        }
+    }
+
+    public static void reset(EditText editText) {
+        if (editText != null) {
+            editText.setText("");
+        }
+    }
+
+    public static double getAmount(EditText editText) {
+        if (editText == null) {
+            return 0D;
+        } else {
+            return CurrencyUtils.parseAmount(getText(editText));
         }
     }
 
