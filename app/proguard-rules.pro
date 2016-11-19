@@ -15,3 +15,5 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+-keep class com.bentech.android.appcommons.preference.Preference { *; }
+-keepclassmembers class * extends com.bentech.android.appcommons.preference.Preference { *; }

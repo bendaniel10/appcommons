@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.ColorInt;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.util.Base64;
@@ -62,7 +63,7 @@ public class DrawableUtils {
         return Base64.encodeToString(byteArray, Base64.DEFAULT);
     }
 
-    public static Drawable tintMyDrawable(Drawable drawable, int color) {
+    public static Drawable tintMyDrawable(Drawable drawable, @ColorInt int color) {
         drawable = DrawableCompat.wrap(drawable);
         DrawableCompat.setTint(drawable, color);
         DrawableCompat.setTintMode(drawable, PorterDuff.Mode.SRC_IN);

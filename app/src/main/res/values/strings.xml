@@ -13,7 +13,7 @@
     <string name="invalid_date">Invalid date</string>
     <string name="label_enable_permissions_hint">You need to enable these permissions to use this app.</string>
     <string name="label_invalid_input_range">Expected length:</string>
-    <string name="label_start_date_greater_than_today_error">Start date must not be later than today</string>
+    <string name="label_start_date_greater_than_today_error">Start date must be later than today</string>
     <string name="label_end_date_must_be_greater_than_start_date">End date must be greater than start date.</string>
     <string name="date_must_not_be_earlier_than_today">Date must not be earlier than today.</string>
     <string name="invalid_phone_number">Invalid phone number</string>

@@ -54,10 +54,11 @@ public class AppCommonsActivity extends AppCompatActivity implements ActivityOpe
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         if (savedInstanceState != null) {
             setAppCommonsContext((AppCommonsContext) savedInstanceState.getSerializable(AppCommonsContext.class.getSimpleName()));
         }
+        super.onCreate(savedInstanceState);
+
     }
 
     public AppCommonsConfiguration getAppCommonsConfiguration() {

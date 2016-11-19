@@ -32,6 +32,9 @@ public class EditTextNumberRangeValidator extends EditTextValidator {
 
     @Override
     public String buildErrorMessage() {
+        if (errorMessage != null) {
+            return  errorMessage;
+        }
         return editText == null ? "" : range.getHigh() == range.getLow() ? String.format("%s %s", editText.getContext().getString(errorMessageId), range.getHigh()) : String.format("%s %s", editText.getContext().getString(errorMessageId), range.toString());
     }
 
