@@ -1,7 +1,6 @@
 # appcommons
 
-[![](https://jitpack.io/v/bendaniel10/appcommons.svg)](https://jitpack.io/#bendaniel10/appcommons)
 
-Frequently used tools in Android Development.
+Appcommons has bundled the frequently used code blocks in Android Development into something that is easy to use.
 
-For more infomation check the [wiki](https://github.com/bendaniel10/appcommons/wiki)
+You can learn all about Appcommons in the [wiki](https://github.com/bendaniel10/appcommons/wiki)
