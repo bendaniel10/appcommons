@@ -2,6 +2,9 @@ package com.bentech.android.appcommons.utils;
 
 import android.util.Log;
 
+import com.bentech.android.appcommons.AppCommons;
+
+import java.math.RoundingMode;
 import java.text.ChoiceFormat;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -20,7 +23,9 @@ public class CurrencyUtils {
         NumberFormat nf = NumberFormat.getCurrencyInstance();
         DecimalFormatSymbols decimalFormatSymbols = ((DecimalFormat) nf).getDecimalFormatSymbols();
         decimalFormatSymbols.setCurrencySymbol("");
+        nf.setMaximumFractionDigits(AppCommons.getAppCommonsConfiguration().getMaximumCurrencyFractionDigits());
         ((DecimalFormat) nf).setDecimalFormatSymbols(decimalFormatSymbols);
+        nf.setRoundingMode(RoundingMode.HALF_UP);
         if (currency == null || currency.isEmpty()) {
             return nf.format(amount);
         }

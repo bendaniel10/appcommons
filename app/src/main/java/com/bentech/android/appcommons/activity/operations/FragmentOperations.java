@@ -21,4 +21,6 @@ public interface FragmentOperations {
     void switchChildFragments(int contentFrameId, Fragment parentFragment, Fragment replacingFragment);
 
     void showFragmentDialog(DialogFragment dialogFragment);
+
+    void dismissFragmentDialog(DialogFragment dialogFragment);
 }

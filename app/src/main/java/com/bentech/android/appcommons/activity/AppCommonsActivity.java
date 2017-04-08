@@ -34,8 +34,11 @@ import com.bentech.android.appcommons.config.AppCommonsConfiguration;
 import com.bentech.android.appcommons.constants.alert.AlertLevel;
 import com.bentech.android.appcommons.permission.AndroidPermissionItem;
 import com.bentech.android.appcommons.permission.PermissionUtil;
+import com.bentech.android.appcommons.utils.DeferredFragmentTransaction;
 
+import java.util.ArrayDeque;
 import java.util.List;
+import java.util.Queue;
 
 /**
  * Created by Daniel on 07/11/2015.
@@ -44,9 +47,11 @@ public class AppCommonsActivity extends AppCompatActivity implements ActivityOpe
     //PERMISSIONS
     private static final int PERMISSION_REQUEST_CODE = 2;
     private final AppCommonsConfiguration appCommonsConfiguration;
+    Queue<DeferredFragmentTransaction> deferredFragmentTransactions = new ArrayDeque<>();
     private AppCommonsContext appCommonsContext;
     private String TAG = AppCommonsActivity.class.getSimpleName();
     private Snackbar currentlyDisplayedSnackbar;
+    private boolean isRunning;
 
     public AppCommonsActivity() {
         appCommonsConfiguration = AppCommons.getAppCommonsConfiguration();
@@ -95,13 +100,28 @@ public class AppCommonsActivity extends AppCompatActivity implements ActivityOpe
         hideCurrentlyDisplayedSnackbar();
         // if there is a fragment and the back stack of this fragment is not empty,
         // then emulate 'onBackPressed' behaviour, because in default, it is not working
+        if (!isRunning) {
+            DeferredFragmentTransaction deferredFragmentTransaction = new DeferredFragmentTransaction() {
+                @Override
+                public void commit(AppCommonsActivity appCommonsActivity) {
+                    clearBackStackInternal();
+                }
+            };
+            deferredFragmentTransactions.add(deferredFragmentTransaction);
+        } else {
+            clearBackStackInternal();
+        }
+    }
+
+    private void clearBackStackInternal() {
+
         FragmentManager fm = getSupportFragmentManager();
         if (fm.getFragments() == null) {
             Log.d(TAG, "No fragments to clear from back stack");
             return;
         }
         for (Fragment frag : fm.getFragments()) {
-            if (frag != null) {
+            if (frag != null && frag.isAdded()) {
                 FragmentManager childFm = frag.getChildFragmentManager();
                 if (childFm.getBackStackEntryCount() > 0) {
                     Log.d(TAG, "Popping child fragment");
@@ -129,6 +149,29 @@ public class AppCommonsActivity extends AppCompatActivity implements ActivityOpe
     public void switchFragmentsAddToBackStack(int contentFrameId, android.support.v4.app.Fragment replacingFragment) {
         hideKeyBoard();
         hideCurrentlyDisplayedSnackbar();
+
+
+        if (!isRunning) {
+            //This will handle switching of fragments when the activity is paused. To prevent IllegalSTateExecption.
+            //This transaction will be used in the resume part too.
+            DeferredFragmentTransaction deferredFragmentTransaction = new DeferredFragmentTransaction() {
+                @Override
+                public void commit(AppCommonsActivity appCommonsActivity) {
+                    switchFragmentsAddToBackStackInternal(getContentFrameId(), getReplacingFragment(), appCommonsActivity);
+                }
+            };
+
+            deferredFragmentTransaction.setContentFrameId(contentFrameId);
+            deferredFragmentTransaction.setReplacingFragment(replacingFragment);
+
+            deferredFragmentTransactions.add(deferredFragmentTransaction);
+        } else {
+            switchFragmentsAddToBackStackInternal(contentFrameId, replacingFragment, this);
+        }
+    }
+
+    private void switchFragmentsAddToBackStackInternal(int contentFrameId, Fragment replacingFragment, AppCommonsActivity appCommonsActivity) {
+
         FragmentManager fragmentManager = this.getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .setCustomAnimations(appCommonsConfiguration.getFragmentEnterAnimation(), appCommonsConfiguration.getFragmentExitAnimation(),
@@ -142,7 +185,28 @@ public class AppCommonsActivity extends AppCompatActivity implements ActivityOpe
     public void switchFragments(int contentFrameId, android.support.v4.app.Fragment replacingFragment) {
         hideKeyBoard();
         hideCurrentlyDisplayedSnackbar();
-        FragmentManager fragmentManager = this.getSupportFragmentManager();
+
+        if (!isRunning) {
+            //This will handle switching of fragments when the activity is paused. To prevent IllegalSTateExecption.
+            //This transaction will be used in the resume part too.
+            DeferredFragmentTransaction deferredFragmentTransaction = new DeferredFragmentTransaction() {
+                @Override
+                public void commit(AppCommonsActivity appCommonsActivity) {
+                    switchFragmentsInternal(getContentFrameId(), getReplacingFragment(), appCommonsActivity);
+                }
+            };
+
+            deferredFragmentTransaction.setContentFrameId(contentFrameId);
+            deferredFragmentTransaction.setReplacingFragment(replacingFragment);
+
+            deferredFragmentTransactions.add(deferredFragmentTransaction);
+        } else {
+            switchFragmentsInternal(contentFrameId, replacingFragment, this);
+        }
+    }
+
+    private void switchFragmentsInternal(int contentFrameId, Fragment replacingFragment, AppCommonsActivity appCommonsActivity) {
+        FragmentManager fragmentManager = appCommonsActivity.getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .setCustomAnimations(appCommonsConfiguration.getFragmentEnterAnimation(), appCommonsConfiguration.getFragmentExitAnimation(),
                         appCommonsConfiguration.getFragmentPopEnterAnimation(), appCommonsConfiguration.getFragmentPopExitAnimation())
@@ -154,6 +218,28 @@ public class AppCommonsActivity extends AppCompatActivity implements ActivityOpe
     public void switchChildFragmentsAddToBackStack(int contentFrameId, Fragment parentFragment, Fragment replacingFragment) {
         hideKeyBoard();
         hideCurrentlyDisplayedSnackbar();
+
+        if (!isRunning) {
+            //This will handle switching of fragments when the activity is paused. To prevent IllegalSTateExecption.
+            //This transaction will be used in the resume part too.
+            DeferredFragmentTransaction deferredFragmentTransaction = new DeferredFragmentTransaction() {
+                @Override
+                public void commit(AppCommonsActivity appCommonsActivity) {
+                    switchChildFragmentsAddToBackStackInternal(getContentFrameId(), getParentFragment(), getReplacingFragment(), appCommonsActivity);
+                }
+            };
+
+            deferredFragmentTransaction.setContentFrameId(contentFrameId);
+            deferredFragmentTransaction.setReplacingFragment(replacingFragment);
+            deferredFragmentTransaction.setParentFragment(parentFragment);
+
+            deferredFragmentTransactions.add(deferredFragmentTransaction);
+        } else {
+            switchChildFragmentsAddToBackStackInternal(contentFrameId, parentFragment, replacingFragment, this);
+        }
+    }
+
+    private void switchChildFragmentsAddToBackStackInternal(int contentFrameId, Fragment parentFragment, Fragment replacingFragment, AppCommonsActivity appCommonsActivity) {
         FragmentManager childFragmentManager = parentFragment.getChildFragmentManager();
         childFragmentManager.beginTransaction()
                 .setCustomAnimations(appCommonsConfiguration.getFragmentEnterAnimation(), appCommonsConfiguration.getFragmentExitAnimation(),
@@ -167,6 +253,30 @@ public class AppCommonsActivity extends AppCompatActivity implements ActivityOpe
     public void switchChildFragments(int contentFrameId, Fragment parentFragment, Fragment replacingFragment) {
         hideKeyBoard();
         hideCurrentlyDisplayedSnackbar();
+
+        if (!isRunning) {
+            //This will handle switching of fragments when the activity is paused. To prevent IllegalSTateExecption.
+            //This transaction will be used in the resume part too.
+            DeferredFragmentTransaction deferredFragmentTransaction = new DeferredFragmentTransaction() {
+                @Override
+                public void commit(AppCommonsActivity appCommonsActivity) {
+                    switchChildFragmentsInternal(getContentFrameId(), getParentFragment(), getReplacingFragment(), appCommonsActivity);
+                }
+            };
+
+            deferredFragmentTransaction.setContentFrameId(contentFrameId);
+            deferredFragmentTransaction.setReplacingFragment(replacingFragment);
+            deferredFragmentTransaction.setParentFragment(parentFragment);
+
+            deferredFragmentTransactions.add(deferredFragmentTransaction);
+        } else {
+            switchChildFragmentsInternal(contentFrameId, parentFragment, replacingFragment, this);
+        }
+
+    }
+
+    private void switchChildFragmentsInternal(int contentFrameId, Fragment parentFragment, Fragment replacingFragment, AppCommonsActivity appCommonsActivity) {
+
         FragmentManager childFragmentManager = parentFragment.getChildFragmentManager();
         childFragmentManager.beginTransaction()
                 .setCustomAnimations(appCommonsConfiguration.getFragmentEnterAnimation(), appCommonsConfiguration.getFragmentExitAnimation(),
@@ -220,9 +330,47 @@ public class AppCommonsActivity extends AppCompatActivity implements ActivityOpe
     }
 
     @Override
-    public void showFragmentDialog(DialogFragment dialogFragment) {
+    public void showFragmentDialog(final DialogFragment dialogFragment) {
+        if (!isRunning) {
+
+            DeferredFragmentTransaction deferredFragmentTransaction = new DeferredFragmentTransaction() {
+                @Override
+                public void commit(AppCommonsActivity appCommonsActivity) {
+                    showFragmentDialogInternal(dialogFragment);
+                }
+            };
+            deferredFragmentTransactions.add(deferredFragmentTransaction);
+        } else {
+            showFragmentDialogInternal(dialogFragment);
+        }
+    }
+
+    private void showFragmentDialogInternal(DialogFragment dialogFragment) {
         dialogFragment.show(this.getSupportFragmentManager(), dialogFragment.getTag());
     }
+
+
+    @Override
+    public void dismissFragmentDialog(final DialogFragment dialogFragment) {
+        if (!isRunning) {
+
+            DeferredFragmentTransaction deferredFragmentTransaction = new DeferredFragmentTransaction() {
+                @Override
+                public void commit(AppCommonsActivity appCommonsActivity) {
+                    dismissFragmentDialogInternal(dialogFragment);
+                }
+            };
+            deferredFragmentTransactions.add(deferredFragmentTransaction);
+
+        } else {
+            dismissFragmentDialogInternal(dialogFragment);
+        }
+    }
+
+    private void dismissFragmentDialogInternal(DialogFragment dialogFragment) {
+        dialogFragment.dismiss();
+    }
+
 
     @Override
     public Snackbar showShortSnackBar(View view, int messageId, int actionLabel, final View.OnClickListener onClickListener, AlertLevel alertLevel) {
@@ -358,12 +506,12 @@ public class AppCommonsActivity extends AppCompatActivity implements ActivityOpe
 
     private void forceUserToEnableRequiredPermissions() {
         List<AndroidPermissionItem> notGrantedPermissions;
-        if (!PermissionUtil.listNotGrantedPermissions(notGrantedPermissions = appCommonsConfiguration.getDangerousPermissions()).isEmpty()) {
+        if (!(notGrantedPermissions = PermissionUtil.listNotGrantedPermissions(appCommonsConfiguration.getDangerousPermissions())).isEmpty()) {
             handleEnablePermissions(notGrantedPermissions);
         }
     }
 
-    private void handleEnablePermissions(List<AndroidPermissionItem> notGrantedPermissions) {
+    public void handleEnablePermissions(List<AndroidPermissionItem> notGrantedPermissions) {
         String[] requestedPermissions = extractRequestedPermissions(notGrantedPermissions);
 
         ActivityCompat.requestPermissions(this,
@@ -393,17 +541,33 @@ public class AppCommonsActivity extends AppCompatActivity implements ActivityOpe
             if (frag != null && frag.isVisible()) {
                 FragmentManager childFm = frag.getChildFragmentManager();
                 if (childFm.getBackStackEntryCount() > 0) {
-                    childFm.popBackStackImmediate();
+                    popBackStackImmediateInternal(childFm);
                     return;
                 } else {
-                    if (fm.getBackStackEntryCount() > 0 ) {
-                        fm.popBackStackImmediate();
+                    if (fm.getBackStackEntryCount() > 0) {
+                        popBackStackImmediateInternal(fm);
                         return;
                     }
                 }
             }
         }
         super.onBackPressed();
+    }
+
+    protected void popBackStackImmediateInternal(final FragmentManager fragmentManager) {
+
+        if (!isRunning) {
+
+            DeferredFragmentTransaction deferredFragmentTransaction = new DeferredFragmentTransaction() {
+                @Override
+                public void commit(AppCommonsActivity appCommonsActivity) {
+                    fragmentManager.popBackStackImmediate();
+                }
+            };
+            deferredFragmentTransactions.add(deferredFragmentTransaction);
+        } else {
+            fragmentManager.popBackStackImmediate();
+        }
     }
 
     @Override
@@ -419,7 +583,17 @@ public class AppCommonsActivity extends AppCompatActivity implements ActivityOpe
                 intent.setData(uri);
                 this.startActivity(intent);
                 showLongToast(appCommonsConfiguration.getEnableRequiredPermissionsMessage());
-                finish();
+            }
+        }
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+
+        while (!deferredFragmentTransactions.isEmpty()) {
+            if(!isFinishing()) {
+                deferredFragmentTransactions.remove().commit(this);
             }
         }
     }
@@ -427,6 +601,13 @@ public class AppCommonsActivity extends AppCompatActivity implements ActivityOpe
     @Override
     protected void onResume() {
         super.onResume();
+        isRunning = true;
         forceUserToEnableRequiredPermissions();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        isRunning = false;
     }
 }

@@ -17,19 +17,38 @@ public final class SpinnerUtils {
 
         boolean isEmpty = spinner == null || spinner.getSelectedItemPosition() == 0 ||
                 spinner.getSelectedItemPosition() == AdapterView.INVALID_POSITION || spinner.getVisibility() != View.VISIBLE;
-        AppCommonsConfiguration appCommonsConfiguration = AppCommons.getAppCommonsConfiguration();
+
         if (isEmpty) {
 
-            if (spinner.getVisibility() != View.VISIBLE) {
+            if (spinner != null && spinner.getVisibility() != View.VISIBLE) {
                 return false;
             }
-            ((TextView) spinner.getChildAt(0)).setTextColor(appCommonsConfiguration.getSpinnerLabelErrorColor());
-
+            setError(spinner);
         } else {
-            ((TextView) spinner.getChildAt(0)).setTextColor(appCommonsConfiguration.getSpinnerLabelValidColor());
+
+            clearError(spinner);
+
         }
 
         return isEmpty;
+    }
+
+    public static void clearError(Spinner spinner) {
+
+        AppCommonsConfiguration appCommonsConfiguration = AppCommons.getAppCommonsConfiguration();
+        if (spinner != null && spinner.getChildAt(0) != null && spinner.getChildAt(0) instanceof TextView) {
+            ((TextView) spinner.getChildAt(0)).setTextColor(appCommonsConfiguration.getSpinnerLabelValidColor());
+        }
+    }
+
+    public static void setError(Spinner spinner) {
+
+        AppCommonsConfiguration appCommonsConfiguration = AppCommons.getAppCommonsConfiguration();
+
+        if (spinner != null && spinner.getChildAt(0) != null && spinner.getChildAt(0) instanceof TextView) {
+            ((TextView) spinner.getChildAt(0)).setTextColor(appCommonsConfiguration.getSpinnerLabelErrorColor());
+        }
+
     }
 
     public static boolean isEmpty(Spinner... spinners) {

@@ -1,5 +1,6 @@
 package com.bentech.android.appcommons.validator;
 
+import android.view.View;
 import android.widget.EditText;
 
 import com.bentech.android.appcommons.AppCommons;
@@ -16,6 +17,6 @@ public class EditTextPhoneNumberValidator extends EditTextValidator {
 
     @Override
     public boolean isValid() {
-        return android.util.Patterns.PHONE.matcher(EditTextUtils.getText(editText)).matches();
+        return editText.getVisibility() == View.GONE || android.util.Patterns.PHONE.matcher(EditTextUtils.getText(editText)).matches();
     }
 }

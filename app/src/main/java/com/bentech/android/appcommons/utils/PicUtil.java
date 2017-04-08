@@ -6,6 +6,7 @@ package com.bentech.android.appcommons.utils;
 //http://www.java2s.com/Code/Android/2D-Graphics/SaveBitmaptoandloadfromExternalStorage.htm
 
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
@@ -32,12 +33,18 @@ public class PicUtil {
     public static File getSavePath() {
         File path;
         if (hasSDCard()) { // SD card
-            path = new File(String.format("%s/%s/", getSDCardPath(), AppCommons.getApplication().getApplicationInfo().labelRes));
+            path = new File(String.format("%s/%s/", getSDCardPath(), getApplicationName(AppCommons.getApplication())));
             path.mkdir();
         } else {
             path = Environment.getDataDirectory();
         }
         return path;
+    }
+
+    public static String getApplicationName(Context context) {
+        ApplicationInfo applicationInfo = context.getApplicationInfo();
+        int stringId = applicationInfo.labelRes;
+        return stringId == 0 ? applicationInfo.nonLocalizedLabel.toString() : context.getString(stringId);
     }
 
     public static String getCacheFilename() {
@@ -138,7 +145,7 @@ public class PicUtil {
 
             return Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight(), mat, true);
         } catch (Exception e) {
-            Log.d(TAG, e.getMessage());
+            Log.d(TAG, String.valueOf(e.getMessage()));
             return null;
         }
     }

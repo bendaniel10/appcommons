@@ -32,6 +32,7 @@ public abstract class AppCommonsConfiguration implements Serializable {
     private int editTextDateEarlierThanTodayErrorMessage;
     private int editTextStartDateGreaterThanTodayErrorMessage;
     private int editTextPhoneNumberValidatorErrorMessage;
+    private int maximumCurrencyFractionDigits = 2;
 
     public AppCommonsConfiguration() {
     }
@@ -213,5 +214,13 @@ public abstract class AppCommonsConfiguration implements Serializable {
 
     public void setEditTextPhoneNumberValidatorErrorMessage(int editTextPhoneNumberValidatorErrorMessage) {
         this.editTextPhoneNumberValidatorErrorMessage = editTextPhoneNumberValidatorErrorMessage;
+    }
+
+    public int getMaximumCurrencyFractionDigits() {
+        return maximumCurrencyFractionDigits;
+    }
+
+    public void setMaximumCurrencyFractionDigits(int maximumCurrencyFractionDigits) {
+        this.maximumCurrencyFractionDigits = maximumCurrencyFractionDigits;
     }
 }

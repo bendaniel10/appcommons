@@ -1,11 +1,18 @@
 package com.bentech.android.appcommons.utils;
 
 import android.content.Context;
+import android.util.Base64;
+import android.util.Base64OutputStream;
 import android.util.Log;
 
 import com.bentech.android.appcommons.AppCommons;
 import com.bentech.android.appcommons.config.AppCommonsConfiguration;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -74,5 +81,57 @@ public class FileUtils {
     private static String getLocaleResourceIdentifier(String resourceIdentifier, Context context) {
         AppCommonsConfiguration appCommonsConfiguration = AppCommons.getAppCommonsConfiguration();
         return String.format("%s_%s", resourceIdentifier, appCommonsConfiguration.getPreferredStringLocale());
+    }
+
+    //http://stackoverflow.com/a/27798343
+    public static String fileToBase64String(String filePath) {
+        InputStream inputStream;
+        try {
+            inputStream = new FileInputStream(filePath);
+        } catch (FileNotFoundException e) {
+            return null;
+        }
+
+        byte[] buffer = new byte[8192];
+        int bytesRead;
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        Base64OutputStream output64 = new Base64OutputStream(output, Base64.DEFAULT);
+
+        try {
+            while ((bytesRead = inputStream.read(buffer)) != -1) {
+                output64.write(buffer, 0, bytesRead);
+            }
+            output64.close();
+
+        } catch (IOException e) {
+            Log.d(TAG, String.valueOf(e.getMessage()));
+            return null;
+        }
+
+        return output.toString();
+    }
+
+
+    //http://stackoverflow.com/a/9910749
+    public static boolean writeInputStreamToFile(String path, InputStream inputStream) {
+        FileOutputStream output;
+        try {
+            output = new FileOutputStream(path);
+            int bufferSize = 1024;
+            byte[] buffer = new byte[bufferSize];
+            int len;
+            while ((len = inputStream.read(buffer)) != -1) {
+                output.write(buffer, 0, len);
+            }
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.d(TAG, "Exception: " + e.getMessage());
+        }
+        return false;
+    }
+
+    public static File getSavePath() {
+        return PicUtil.getSavePath();
     }
 }
