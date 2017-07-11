@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="fab_margin">96dp</dimen>
+    <dimen name="container_padding">48dp</dimen>
+    <dimen name="larger_container_padding">64dp</dimen>
+    <dimen name="content_spacing">14dp</dimen>
+    <dimen name="large_content_spacing">18dp</dimen>
+    <dimen name="headline_text_size">23sp</dimen>
+    <dimen name="spinner_item_size">21sp</dimen>
+    <dimen name="sub_headline_text_size">25sp</dimen>
+    <dimen name="body_text_size">17sp</dimen>
+    <dimen name="button_text_size">17sp</dimen>
+    <dimen name="hint_link_text_size">17sp</dimen>
+    <dimen name="edit_text_size">15sp</dimen>
+    <dimen name="hint_text_size">16sp</dimen>
+    <dimen name="table_title_text_size">17sp</dimen>
+    <dimen name="table_text_text_size">17sp</dimen>
+    <dimen name="button_padding">24dp</dimen>
+</resources>

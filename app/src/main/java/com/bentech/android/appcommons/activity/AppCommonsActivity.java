@@ -178,7 +178,7 @@ public class AppCommonsActivity extends AppCompatActivity implements ActivityOpe
                         appCommonsConfiguration.getFragmentPopEnterAnimation(), appCommonsConfiguration.getFragmentPopExitAnimation())
                 .replace(contentFrameId, replacingFragment)
                 .addToBackStack(replacingFragment.getClass().getSimpleName())
-                .commit();
+                .commitAllowingStateLoss();
     }
 
     @Override
@@ -211,7 +211,7 @@ public class AppCommonsActivity extends AppCompatActivity implements ActivityOpe
                 .setCustomAnimations(appCommonsConfiguration.getFragmentEnterAnimation(), appCommonsConfiguration.getFragmentExitAnimation(),
                         appCommonsConfiguration.getFragmentPopEnterAnimation(), appCommonsConfiguration.getFragmentPopExitAnimation())
                 .replace(contentFrameId, replacingFragment)
-                .commit();
+                .commitAllowingStateLoss();
     }
 
     @Override
@@ -246,7 +246,7 @@ public class AppCommonsActivity extends AppCompatActivity implements ActivityOpe
                         appCommonsConfiguration.getFragmentPopEnterAnimation(), appCommonsConfiguration.getFragmentPopExitAnimation())
                 .replace(contentFrameId, replacingFragment)
                 .addToBackStack(replacingFragment.getClass().getSimpleName())
-                .commit();
+                .commitAllowingStateLoss();
     }
 
     @Override
@@ -282,7 +282,7 @@ public class AppCommonsActivity extends AppCompatActivity implements ActivityOpe
                 .setCustomAnimations(appCommonsConfiguration.getFragmentEnterAnimation(), appCommonsConfiguration.getFragmentExitAnimation(),
                         appCommonsConfiguration.getFragmentPopEnterAnimation(), appCommonsConfiguration.getFragmentPopExitAnimation())
                 .replace(contentFrameId, replacingFragment)
-                .commit();
+                .commitAllowingStateLoss();
     }
 
     @Override

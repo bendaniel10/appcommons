@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="headline_text_size">20sp</dimen>
+    <dimen name="spinner_item_size">18sp</dimen>
+    <dimen name="sub_headline_text_size">22sp</dimen>
+    <dimen name="body_text_size">14sp</dimen>
+    <dimen name="button_text_size">15sp</dimen>
+    <dimen name="hint_text_size">13sp</dimen>
+    <dimen name="table_title_text_size">14sp</dimen>
+    <dimen name="table_text_text_size">14sp</dimen>
+    <dimen name="hint_link_text_size">14sp</dimen>
+    <dimen name="edit_text_size">14sp</dimen>
+    <dimen name="button_padding">20dp</dimen>
+</resources>

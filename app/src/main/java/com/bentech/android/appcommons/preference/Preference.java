@@ -34,7 +34,7 @@ public abstract class Preference implements Serializable {
         return gson.fromJson(json, this.getClass());
     }
 
-    @SuppressLint("CommitPrefEdits")
+    @SuppressLint({"CommitPrefEdits", "ApplySharedPref"})
     public void savePreference() {
         //http://stackoverflow.com/a/29670311 ?
         SharedPreferences.Editor editor = sharedPreference.edit();
@@ -46,7 +46,7 @@ public abstract class Preference implements Serializable {
         editor.commit();
     }
 
-    @SuppressLint("CommitPrefEdits")
+    @SuppressLint({"CommitPrefEdits", "ApplySharedPref"})
     public void clearPreference() {
         SharedPreferences.Editor editor = sharedPreference.edit();
 

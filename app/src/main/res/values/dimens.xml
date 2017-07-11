@@ -6,6 +6,36 @@
 
     <!-- Per the design guidelines, navigation drawers should be between 240dp and 320dp:
          https://developer.android.com/design/patterns/navigation-drawer.html -->
+
+    <!--Text sizes-->
+    <dimen name="headline_text_size">18sp</dimen>
+    <dimen name="spinner_item_size">16sp</dimen>
+    <dimen name="sub_headline_text_size">20sp</dimen>
+    <dimen name="body_text_size">14sp</dimen>
+    <dimen name="button_text_size">14sp</dimen>
+    <dimen name="hint_link_text_size">12sp</dimen>
+    <dimen name="edit_text_size">10sp</dimen>
+    <dimen name="hint_text_size">11sp</dimen>
+    <dimen name="table_title_text_size">12sp</dimen>
+    <dimen name="table_text_text_size">12sp</dimen>
+    <!--End Text Sizes-->
+
+    <dimen name="larger_container_padding">25dp</dimen>
+    <dimen name="medTxtSize">8dp</dimen>
+    <dimen name="touch_target_size">48dp</dimen>
+    <dimen name="half_touch_target_size">24dp</dimen>
+    <dimen name="large_content_spacing">16dp</dimen>
+    <dimen name="layout_padding_top">30dp</dimen>
+    <dimen name="tab_indicator_height">2dp</dimen>
+
+    <dimen name="fab_elevation">6dp</dimen>
+    <dimen name="fab_menu_icons_size">72dp</dimen>
+
+    <dimen name="hint_link_height">35dp</dimen>
+    <dimen name="button_padding">16dp</dimen>
+    <dimen name="edit_profile_icon_width">20dp</dimen>
+
+
     <dimen name="navigation_drawer_width">280dp</dimen>
     <dimen name="list_item_size">16sp</dimen>
     <dimen name="list_item_padding">10dp</dimen>
