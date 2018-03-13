@@ -1,14 +1,14 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion 27
+    buildToolsVersion "27.0.3"
 
     defaultConfig {
         minSdkVersion 15
-        targetSdkVersion 25
-        versionCode 2
-        versionName "1.0.2"
+        targetSdkVersion 27
+        versionCode 5
+        versionName "1.0.8"
     }
     buildTypes {
         release {
@@ -19,10 +19,12 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    testCompile 'junit:junit:4.12'
-    compile 'com.google.guava:guava:20.0'
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support:design:25.3.1'
-    compile 'com.google.code.gson:gson:2.7'
+
+    def supportVer = '27.1.0'
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    testImplementation 'junit:junit:4.12'
+    implementation 'com.google.guava:guava:22.0'
+    implementation "com.android.support:appcompat-v7:$supportVer"
+    implementation "com.android.support:design:$supportVer"
+    implementation 'com.google.code.gson:gson:2.8.1'
 }
