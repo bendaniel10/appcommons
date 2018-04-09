@@ -20,7 +20,7 @@ android {
 
 dependencies {
 
-    def supportVer = '27.1.0'
+    def supportVer = '27.1.1'
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     testImplementation 'junit:junit:4.12'
     implementation 'com.google.guava:guava:22.0'
