@@ -23,7 +23,7 @@ dependencies {
     def supportVer = '27.1.1'
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     testImplementation 'junit:junit:4.12'
-    implementation 'com.google.guava:guava:22.0'
+    implementation 'com.google.guava:guava:23.3-android'
     implementation "com.android.support:appcompat-v7:$supportVer"
     implementation "com.android.support:design:$supportVer"
     implementation 'com.google.code.gson:gson:2.8.1'
