@@ -1,8 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.bentech.android.appcommons">
+  package="com.bentech.android.appcommons">
 
-    <application android:supportsRtl="true" android:theme="@style/AppTheme">
+  <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+  <application
+    android:supportsRtl="true"
+    android:theme="@style/AppTheme">
 
-    </application>
+  </application>
 
 </manifest>

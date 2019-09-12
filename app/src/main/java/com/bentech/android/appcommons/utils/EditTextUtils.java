@@ -1,6 +1,6 @@
 package com.bentech.android.appcommons.utils;
 
-import android.support.design.widget.TextInputLayout;
+import com.google.android.material.textfield.TextInputLayout;
 import android.text.TextUtils;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;

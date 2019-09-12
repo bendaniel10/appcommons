@@ -8,16 +8,6 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
-import android.support.annotation.StringRes;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -35,15 +25,27 @@ import com.bentech.android.appcommons.constants.alert.AlertLevel;
 import com.bentech.android.appcommons.permission.AndroidPermissionItem;
 import com.bentech.android.appcommons.permission.PermissionUtil;
 import com.bentech.android.appcommons.utils.DeferredFragmentTransaction;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayDeque;
 import java.util.List;
 import java.util.Queue;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+
 /**
  * Created by Daniel on 07/11/2015.
  */
-public class AppCommonsActivity extends AppCompatActivity implements ActivityOperations, FragmentOperations, FeedbackOperations {
+public class AppCommonsActivity extends AppCompatActivity implements ActivityOperations, FragmentOperations,
+        FeedbackOperations {
     //PERMISSIONS
     private static final int PERMISSION_REQUEST_CODE = 2;
     private final AppCommonsConfiguration appCommonsConfiguration;
@@ -89,7 +91,8 @@ public class AppCommonsActivity extends AppCompatActivity implements ActivityOpe
     public void restartApp(Context context, Class starupClass) {
         Intent mStartActivity = new Intent(context, starupClass);
         int mPendingIntentId = 123456;
-        PendingIntent mPendingIntent = PendingIntent.getActivity(context, mPendingIntentId, mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
+        PendingIntent mPendingIntent = PendingIntent.getActivity(context, mPendingIntentId, mStartActivity,
+                PendingIntent.FLAG_CANCEL_CURRENT);
         AlarmManager mgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
         System.exit(0);
@@ -146,10 +149,9 @@ public class AppCommonsActivity extends AppCompatActivity implements ActivityOpe
     }
 
     @Override
-    public void switchFragmentsAddToBackStack(int contentFrameId, android.support.v4.app.Fragment replacingFragment) {
+    public void switchFragmentsAddToBackStack(int contentFrameId, Fragment replacingFragment) {
         hideKeyBoard();
         hideCurrentlyDisplayedSnackbar();
-
 
         if (!isRunning) {
             //This will handle switching of fragments when the activity is paused. To prevent IllegalSTateExecption.
@@ -170,19 +172,22 @@ public class AppCommonsActivity extends AppCompatActivity implements ActivityOpe
         }
     }
 
-    private void switchFragmentsAddToBackStackInternal(int contentFrameId, Fragment replacingFragment, AppCommonsActivity appCommonsActivity) {
+    private void switchFragmentsAddToBackStackInternal(int contentFrameId, Fragment replacingFragment,
+                                                       AppCommonsActivity appCommonsActivity) {
 
         FragmentManager fragmentManager = this.getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .setCustomAnimations(appCommonsConfiguration.getFragmentEnterAnimation(), appCommonsConfiguration.getFragmentExitAnimation(),
-                        appCommonsConfiguration.getFragmentPopEnterAnimation(), appCommonsConfiguration.getFragmentPopExitAnimation())
+                .setCustomAnimations(appCommonsConfiguration.getFragmentEnterAnimation(),
+                        appCommonsConfiguration.getFragmentExitAnimation(),
+                        appCommonsConfiguration.getFragmentPopEnterAnimation(),
+                        appCommonsConfiguration.getFragmentPopExitAnimation())
                 .replace(contentFrameId, replacingFragment)
                 .addToBackStack(replacingFragment.getClass().getSimpleName())
                 .commitAllowingStateLoss();
     }
 
     @Override
-    public void switchFragments(int contentFrameId, android.support.v4.app.Fragment replacingFragment) {
+    public void switchFragments(int contentFrameId, Fragment replacingFragment) {
         hideKeyBoard();
         hideCurrentlyDisplayedSnackbar();
 
@@ -205,17 +210,21 @@ public class AppCommonsActivity extends AppCompatActivity implements ActivityOpe
         }
     }
 
-    private void switchFragmentsInternal(int contentFrameId, Fragment replacingFragment, AppCommonsActivity appCommonsActivity) {
+    private void switchFragmentsInternal(int contentFrameId, Fragment replacingFragment,
+                                         AppCommonsActivity appCommonsActivity) {
         FragmentManager fragmentManager = appCommonsActivity.getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .setCustomAnimations(appCommonsConfiguration.getFragmentEnterAnimation(), appCommonsConfiguration.getFragmentExitAnimation(),
-                        appCommonsConfiguration.getFragmentPopEnterAnimation(), appCommonsConfiguration.getFragmentPopExitAnimation())
+                .setCustomAnimations(appCommonsConfiguration.getFragmentEnterAnimation(),
+                        appCommonsConfiguration.getFragmentExitAnimation(),
+                        appCommonsConfiguration.getFragmentPopEnterAnimation(),
+                        appCommonsConfiguration.getFragmentPopExitAnimation())
                 .replace(contentFrameId, replacingFragment)
                 .commitAllowingStateLoss();
     }
 
     @Override
-    public void switchChildFragmentsAddToBackStack(int contentFrameId, Fragment parentFragment, Fragment replacingFragment) {
+    public void switchChildFragmentsAddToBackStack(int contentFrameId, Fragment parentFragment,
+                                                   Fragment replacingFragment) {
         hideKeyBoard();
         hideCurrentlyDisplayedSnackbar();
 
@@ -225,7 +234,8 @@ public class AppCommonsActivity extends AppCompatActivity implements ActivityOpe
             DeferredFragmentTransaction deferredFragmentTransaction = new DeferredFragmentTransaction() {
                 @Override
                 public void commit(AppCommonsActivity appCommonsActivity) {
-                    switchChildFragmentsAddToBackStackInternal(getContentFrameId(), getParentFragment(), getReplacingFragment(), appCommonsActivity);
+                    switchChildFragmentsAddToBackStackInternal(getContentFrameId(), getParentFragment(),
+                            getReplacingFragment(), appCommonsActivity);
                 }
             };
 
@@ -239,11 +249,15 @@ public class AppCommonsActivity extends AppCompatActivity implements ActivityOpe
         }
     }
 
-    private void switchChildFragmentsAddToBackStackInternal(int contentFrameId, Fragment parentFragment, Fragment replacingFragment, AppCommonsActivity appCommonsActivity) {
+    private void switchChildFragmentsAddToBackStackInternal(int contentFrameId, Fragment parentFragment,
+                                                            Fragment replacingFragment,
+                                                            AppCommonsActivity appCommonsActivity) {
         FragmentManager childFragmentManager = parentFragment.getChildFragmentManager();
         childFragmentManager.beginTransaction()
-                .setCustomAnimations(appCommonsConfiguration.getFragmentEnterAnimation(), appCommonsConfiguration.getFragmentExitAnimation(),
-                        appCommonsConfiguration.getFragmentPopEnterAnimation(), appCommonsConfiguration.getFragmentPopExitAnimation())
+                .setCustomAnimations(appCommonsConfiguration.getFragmentEnterAnimation(),
+                        appCommonsConfiguration.getFragmentExitAnimation(),
+                        appCommonsConfiguration.getFragmentPopEnterAnimation(),
+                        appCommonsConfiguration.getFragmentPopExitAnimation())
                 .replace(contentFrameId, replacingFragment)
                 .addToBackStack(replacingFragment.getClass().getSimpleName())
                 .commitAllowingStateLoss();
@@ -260,7 +274,8 @@ public class AppCommonsActivity extends AppCompatActivity implements ActivityOpe
             DeferredFragmentTransaction deferredFragmentTransaction = new DeferredFragmentTransaction() {
                 @Override
                 public void commit(AppCommonsActivity appCommonsActivity) {
-                    switchChildFragmentsInternal(getContentFrameId(), getParentFragment(), getReplacingFragment(), appCommonsActivity);
+                    switchChildFragmentsInternal(getContentFrameId(), getParentFragment(), getReplacingFragment(),
+                            appCommonsActivity);
                 }
             };
 
@@ -275,12 +290,15 @@ public class AppCommonsActivity extends AppCompatActivity implements ActivityOpe
 
     }
 
-    private void switchChildFragmentsInternal(int contentFrameId, Fragment parentFragment, Fragment replacingFragment, AppCommonsActivity appCommonsActivity) {
+    private void switchChildFragmentsInternal(int contentFrameId, Fragment parentFragment, Fragment replacingFragment,
+                                              AppCommonsActivity appCommonsActivity) {
 
         FragmentManager childFragmentManager = parentFragment.getChildFragmentManager();
         childFragmentManager.beginTransaction()
-                .setCustomAnimations(appCommonsConfiguration.getFragmentEnterAnimation(), appCommonsConfiguration.getFragmentExitAnimation(),
-                        appCommonsConfiguration.getFragmentPopEnterAnimation(), appCommonsConfiguration.getFragmentPopExitAnimation())
+                .setCustomAnimations(appCommonsConfiguration.getFragmentEnterAnimation(),
+                        appCommonsConfiguration.getFragmentExitAnimation(),
+                        appCommonsConfiguration.getFragmentPopEnterAnimation(),
+                        appCommonsConfiguration.getFragmentPopExitAnimation())
                 .replace(contentFrameId, replacingFragment)
                 .commitAllowingStateLoss();
     }
@@ -349,7 +367,6 @@ public class AppCommonsActivity extends AppCompatActivity implements ActivityOpe
         dialogFragment.show(this.getSupportFragmentManager(), dialogFragment.getTag());
     }
 
-
     @Override
     public void dismissFragmentDialog(final DialogFragment dialogFragment) {
         if (!isRunning) {
@@ -371,9 +388,9 @@ public class AppCommonsActivity extends AppCompatActivity implements ActivityOpe
         dialogFragment.dismiss();
     }
 
-
     @Override
-    public Snackbar showShortSnackBar(View view, int messageId, int actionLabel, final View.OnClickListener onClickListener, AlertLevel alertLevel) {
+    public Snackbar showShortSnackBar(View view, int messageId, int actionLabel,
+                                      final View.OnClickListener onClickListener, AlertLevel alertLevel) {
         final Snackbar snackBar = Snackbar.make(view, getString(messageId), Snackbar.LENGTH_SHORT);
         View snackView = snackBar.getView();
         buildSnackbar(snackView, alertLevel);
@@ -435,7 +452,8 @@ public class AppCommonsActivity extends AppCompatActivity implements ActivityOpe
     }
 
     @Override
-    public Snackbar showIndefiniteSnackBar(View view, int messageId, final View.OnClickListener onClickListener, AlertLevel alertLevel) {
+    public Snackbar showIndefiniteSnackBar(View view, int messageId, final View.OnClickListener onClickListener,
+                                           AlertLevel alertLevel) {
         final Snackbar snackBar = Snackbar.make(view, getString(messageId), Snackbar.LENGTH_INDEFINITE);
         View snackView = snackBar.getView();
         buildSnackbar(snackView, alertLevel);
@@ -453,7 +471,8 @@ public class AppCommonsActivity extends AppCompatActivity implements ActivityOpe
     }
 
     @Override
-    public Snackbar showIndefiniteSnackBar(View view, int messageId, int actionLabel, final View.OnClickListener onClickListener, AlertLevel alertLevel) {
+    public Snackbar showIndefiniteSnackBar(View view, int messageId, int actionLabel,
+                                           final View.OnClickListener onClickListener, AlertLevel alertLevel) {
         final Snackbar snackBar = Snackbar.make(view, getString(messageId), Snackbar.LENGTH_INDEFINITE);
         View snackView = snackBar.getView();
         buildSnackbar(snackView, alertLevel);
@@ -506,7 +525,8 @@ public class AppCommonsActivity extends AppCompatActivity implements ActivityOpe
 
     private void forceUserToEnableRequiredPermissions() {
         List<AndroidPermissionItem> notGrantedPermissions;
-        if (!(notGrantedPermissions = PermissionUtil.listNotGrantedPermissions(appCommonsConfiguration.getDangerousPermissions())).isEmpty()) {
+        if (!(notGrantedPermissions =
+                PermissionUtil.listNotGrantedPermissions(appCommonsConfiguration.getDangerousPermissions())).isEmpty()) {
             handleEnablePermissions(notGrantedPermissions);
         }
     }
@@ -592,7 +612,7 @@ public class AppCommonsActivity extends AppCompatActivity implements ActivityOpe
         super.onPostResume();
 
         while (!deferredFragmentTransactions.isEmpty()) {
-            if(!isFinishing()) {
+            if (!isFinishing()) {
                 deferredFragmentTransactions.remove().commit(this);
             }
         }

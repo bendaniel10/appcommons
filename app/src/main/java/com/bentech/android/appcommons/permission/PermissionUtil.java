@@ -3,7 +3,7 @@ package com.bentech.android.appcommons.permission;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.pm.PermissionInfo;
-import android.support.v4.app.ActivityCompat;
+import androidx.core.app.ActivityCompat;
 import android.util.Log;
 
 import com.bentech.android.appcommons.AppCommons;

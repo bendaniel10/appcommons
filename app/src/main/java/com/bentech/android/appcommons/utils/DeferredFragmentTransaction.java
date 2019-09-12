@@ -1,6 +1,6 @@
 package com.bentech.android.appcommons.utils;
 
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 
 import com.bentech.android.appcommons.activity.AppCommonsActivity;
 

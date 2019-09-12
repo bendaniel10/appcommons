@@ -1,8 +1,8 @@
 package com.bentech.android.appcommons.activity.operations;
 
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 /**
  * Created by Daniel on 07/11/2015.
@@ -12,9 +12,9 @@ public interface FragmentOperations {
 
     void popBackStack(FragmentManager fragmentManager);
 
-    void switchFragmentsAddToBackStack(int contentFrameId, android.support.v4.app.Fragment replacingFragment);
+    void switchFragmentsAddToBackStack(int contentFrameId, Fragment replacingFragment);
 
-    void switchFragments(int contentFrameId, android.support.v4.app.Fragment replacingFragment);
+    void switchFragments(int contentFrameId, Fragment replacingFragment);
 
     void switchChildFragmentsAddToBackStack(int contentFrameId, Fragment parentFragment, Fragment replacingFragment);
 

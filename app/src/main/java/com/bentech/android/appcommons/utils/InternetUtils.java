@@ -1,5 +1,6 @@
 package com.bentech.android.appcommons.utils;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -7,11 +8,16 @@ import android.net.NetworkInfo;
 import com.bentech.android.appcommons.R;
 import com.bentech.android.appcommons.activity.AppCommonsActivity;
 
+import androidx.annotation.RequiresPermission;
+
+import static android.Manifest.permission.ACCESS_NETWORK_STATE;
+
 /**
  * Created by Daniel on 8/12/2015.
  */
 public class InternetUtils {
 
+    @RequiresPermission(ACCESS_NETWORK_STATE)
     public static boolean isNetworkAvailable(Context context) {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -25,6 +31,7 @@ public class InternetUtils {
             this.context = context;
         }
 
+        @SuppressLint("MissingPermission")
         public boolean execute() {
             if (isNetworkAvailable(context)) {
                 internetOperation();
@@ -35,6 +42,7 @@ public class InternetUtils {
             }
         }
 
+        @SuppressLint("MissingPermission")
         public boolean executeFailSilent() {
             if (isNetworkAvailable(context)) {
                 internetOperation();
